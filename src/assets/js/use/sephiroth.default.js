@@ -1,10 +1,15 @@
+import {
+  SetObject,
+  GetObject
+} from "../use/ObjectHelper";
+
 // 获取高度
 function normailHeight(imgsrc) {
   var img = new Image();
   // 改变图片的src  
   img.src = imgsrc;
-  var normailHeight = img.height;
-  return normailHeight;
+  $normailHeight = img.height;
+  return $normailHeight;
 };
 
 /**
@@ -21,6 +26,21 @@ function getMaxZindex(doms) {
     }
   }
   return max;
+}
+
+// 最后的id
+var $lastRectId, $normailHeight;
+// get $lastRectId
+function getlastRectId() {
+  var obj = {
+    // 当前id
+    _lastRectId: $lastRectId,
+    // 当前图片高度
+    _normailHeight: $normailHeight,
+    // 当前画图对象
+    _shape: $shape
+  };
+  return obj;
 }
 
 // 鼠标右键按下事件处理函数
@@ -58,30 +78,36 @@ function mouseRightDown(e) {
   }
   $('.right-menu').on('click', function () {
     // 删除矩形框
+    var tempid = parseInt(selectid.substring(8))+1;
     $rect.remove();
     $('#rf_show_' + selectid).remove();
-
+    deldata(tempid);
     // 删除右键菜单
     $(this).remove();
     sumMarkCount();
   });
 }
 
-
 // 公共加载对象 画图用需要先调用 defalut
 var $shape = null;
+  // 是否保存 如果没有保存，则删除之前的画框
+  var $saved = false;
+  // public 设置保存
+  function Set_saved(value){
+    $saved = value;
+  }
+  // public ref 删除方法
+  var deldata=null;
+
 // 初始化加载
-function sephirothdefault() {
+function sephirothdefault(funcdelData) {
+  deldata = funcdelData;
+
   $("#work-space").on("contextmenu", function () {
     return false; //设置返回为false，设置为true则返回右键菜单  限制浏览器右键
   });
   /// 加载用全局变量
   var $img = "../../src/assets/images/Untitled2.jpg";
-
-  // 是否保存
-  var $saved = true;
-  // 最后的id
-  var $lastRectId = "";
   // 画图判断
   var flag = true;
   // 加载插件
@@ -205,40 +231,39 @@ function InitData(result) {
       var shape_id = (parseInt(shapeId.split("-")[2]) + 1);
       $shape.drawShape(box.x, box.y, box.w, box.h, shapeId, function (shape) {
         $("#" + shapeId).data("type", box.type)
-        .attr("type", box.type)
-        .data("misc_type", box.misc_type)
-        .attr("misc_type", box.misc_type)
-        .data("cut", box.cut)
-        .attr("cut", box.cut)
-        .data("shade", box.shade)
-        .attr("shade", box.shade)
-        .data("title", box.title)
-        .data("fujia", box.fujia)
-        .data("light_id", box.light_id)
-        .attr("light_id", box.light_id)
-        .data("cont", box.cont)
-        .attr("light_color", box.light_color)
-        .data("val_data", box.val_data)
-        .attr("val_data", box.val_data)
-        .data("val_data1", box.val_data1)
-        .attr("val_data1", box.val_data1)
-        .data("val1", box.val1)
-        .attr("val1", box.val1)
-        .data("light_color", box.light_color)
-        .attr("content", box.content)
-        .data("content", box.content)
-        .attr("fujia", box.fujia)
-        .attr("cont", box.cont)
-        .attr("title", box.title)
-        .addClass("water_" + box.type)
-        .append('<span class="box_watermark">' + shape_id + '</span>');
+          .attr("type", box.type)
+          .data("misc_type", box.misc_type)
+          .attr("misc_type", box.misc_type)
+          .data("cut", box.cut)
+          .attr("cut", box.cut)
+          .data("shade", box.shade)
+          .attr("shade", box.shade)
+          .data("title", box.title)
+          .data("fujia", box.fujia)
+          .data("light_id", box.light_id)
+          .attr("light_id", box.light_id)
+          .data("cont", box.cont)
+          .attr("light_color", box.light_color)
+          .data("val_data", box.val_data)
+          .attr("val_data", box.val_data)
+          .data("val_data1", box.val_data1)
+          .attr("val_data1", box.val_data1)
+          .data("val1", box.val1)
+          .attr("val1", box.val1)
+          .data("light_color", box.light_color)
+          .attr("content", box.content)
+          .data("content", box.content)
+          .attr("fujia", box.fujia)
+          .attr("cont", box.cont)
+          .attr("title", box.title)
+          .addClass("water_" + box.type)
+          .append('<span class="box_watermark">' + shape_id + '</span>');
       });
       // 页面底部的矩形框
       $("#" + shapeId).data({
         'parentId': box.parentId,
         'content': box.content
       });
-      //addNewRects($("#" + shapeId));
       // 重新注册鼠标右键事件
       $("#" + shapeId).on('mousedown', mouseRightDown);
     });
@@ -277,5 +302,8 @@ function sumMarkCount() {
 
 export {
   sephirothdefault,
-  InitData
+  InitData,
+  getlastRectId,
+  mouseRightDown,
+  Set_saved,
 }
