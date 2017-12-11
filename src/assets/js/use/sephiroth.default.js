@@ -183,7 +183,7 @@ function sephirothdefault(funcdelData) {
         $("#cut").hide();
         $("#light_color").hide();
         $("#misc_type").hide();
-        document.getElementById("InBrand").innerHTML = "";
+        //document.getElementById("InBrand").innerHTML = "";
         $("#box-form")
           .addClass("active")
           .show();
@@ -219,7 +219,7 @@ function InitData(result) {
     var Ban_sign = result.Workload.Ban_sign;
     var Other = result.Workload.Other;
     setMarkcount();
-    document.getElementById("InBrand").innerHTML = result.scene;
+    //document.getElementById("InBrand").innerHTML = result.scene;
     var $list = result.boxs;
 
     $(result.boxs).each(function (i, obj) {

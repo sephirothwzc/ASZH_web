@@ -50,7 +50,27 @@
                 <p id="Traffic_light_status">
                   <label>交通标志类型：</label>
                   <br />
-                  <label style="width:200px;" id="InBrand"></label>
+                  <label style="width:200px;" >{{justItem.jtype}}</label>
+                  <br />
+                  <label style="width:200px;" >{{justItem.jpro}}</label>
+                  <br />
+                  <template v-if="justItem.jpro!=''">
+                        <select style="width:180px;" v-model="justItem.seljpro2">
+                            <option v-for="jpro2 in justItem.jpro2" v-bind:value="jpro2">
+                                {{jpro2.pro2txt}}
+                             </option>
+                        </select>
+                  </template>
+                  <template v-if="justItem.seljpro2.pro2type=='text'">
+                        <input type="text" v-model="justItem.seljpro2value" />
+                  </template>
+                  <template v-if="justItem.seljpro2.pro2type=='sel'">
+                        <select v-model="justItem.seljpro2value">
+                            <option v-for="selpro2 in justItem.seljpro2.pro2option" v-bind:value="selpro2">
+                                {{selpro2}}
+                             </option> 
+                        </select>
+                  </template>
                 </p>
                 <p id="fujia_content">
                   <label>附加文本:</label>
@@ -84,42 +104,17 @@
         </div>
         <!--右侧表单部分-->
         <div class="cont_r clearfix">
-          <div id="property_list">
-            <!--一二级属性选择栏-->
-            <div class="rect_selects">
-              <ul class="clearfix">
-                <li>车辆</li>
-                <li class="cur_one_floor">行人</li>
-                <li>禁止标志</li>
-                <li>信号灯</li>
-                <li>指示标志</li>
-                <li>其他</li>
-              </ul>
-              <div class="pic_attr clearfix">
-                <div class="pic_items">
-                  <img src="http://crowdweb.blob.core.chinacloudapi.cn/100148/小型汽车.png" data-style="小型汽车" alt="小型汽车" width="80" height="80"
-                    selecttype="Car" selectdata="1,0,">
-                </div>
-                <div class="pic_items">
-                  <img src="http://crowdweb.blob.core.chinacloudapi.cn/100148/小型汽车.png" data-style="小型汽车" alt="小型汽车" width="80" height="80"
-                    selecttype="Car" selectdata="1,0,">
-                </div>
-                <div class="pic_items">
-                  <img src="http://crowdweb.blob.core.chinacloudapi.cn/100148/小型汽车.png" data-style="小型汽车" alt="小型汽车" width="80" height="80"
-                    selecttype="Car" selectdata="1,0,">
-                </div>
-                <div class="pic_items">
-                  <img src="http://crowdweb.blob.core.chinacloudapi.cn/100148/小型汽车.png" data-style="小型汽车" alt="小型汽车" width="80" height="80"
-                    selecttype="Car" selectdata="1,0,">
-                </div>
-                <div class="pic_items">
-                  <img src="http://crowdweb.blob.core.chinacloudapi.cn/100148/小型汽车.png" data-style="小型汽车" alt="小型汽车" width="80" height="80"
-                    selecttype="Car" selectdata="1,0,">
-                </div>
-              </div>
-            </div>
-          </div>
-
+</style>
+<div class="tab_box">
+    <div class="tab_div" v-for="item in prodata">
+        <input type="radio" v-bind:id="item.id" class="tab_radio" name="tab" checked="checked" />
+        <label class="tab_label" v-bind:for="item.id">{{item.title}}</label>		
+        <div class="tab_content">
+			<hr>
+            <div class="pic_items" v-for="tempitem in item.plist" v-on:click="chekproitem(item,tempitem)">{{tempitem.btnname}}</div>
+        </div>
+    </div>
+</div>
         </div>
       </div>
     </div>
@@ -194,6 +189,61 @@ var resutl = {
   _guid: "c020a8dc-198f-42f4-aa85-8ace7ff17a6b",
   _personInProjectId: 407229
 };
+
+// 属性数据
+var tempprodate=[
+    {
+        id:'tab1',
+        title:'车辆',
+        plist:[{
+            btnname:'大卡车',
+            pro2:[{
+                id: 1,
+                pro2type:'text',
+                pro2txt:'车牌'
+            },{
+                id:2,
+                pro2type:'text',
+                pro2txt:'颜色'
+            }]
+        },{
+            btnname:'小卡车',
+            pro2:[{
+                id: 3,
+                pro2type:'sel',
+                pro2txt:'车型',
+                pro2option:['李白','杜甫','白居易']
+            },{
+                id:4,
+                pro2type:'text',
+                pro2txt:'颜色'
+            }]
+        },{
+            btnname:'卡丁车'
+        }]
+    },    {
+        id:'tab2',
+        title:'行人',
+        plist:[{
+            btnname:'男人'
+        },{
+            btnname:'女人'
+        },{
+            btnname:'老人'
+        }]
+    },    {
+        id:'tab3',
+        title:'禁止行动',
+        plist:[{
+            btnname:'抽烟'
+        },{
+            btnname:'喝酒'
+        },{
+            btnname:'烫头'
+        }]
+    }
+]
+
 export default {
   name: "md_picmark",
   //   data() {
@@ -203,7 +253,15 @@ export default {
     return {
       loadresutl: resutl,
       justItemtype: "普通灯",
-      isNew: false
+      prodata :tempprodate, 
+      isNew: false,
+      justItem: {
+          jtype:'',// 类型
+          jpro:'',// 属性
+          jpro2:[],// 二级属性 集合 用于选择
+          seljpro2:'',// 选中的二级属性
+          seljpro2value:'' // 二级属性值
+      }
     };
   },
   mounted() {
@@ -273,6 +331,12 @@ export default {
         $rect.remove();
         this.deldata(boxitem.shade);
     },
+    // public 弹出选择标记
+    chekproitem(item,tempitem){
+        this.justItem.jtype = item.title;
+        this.justItem.jpro = tempitem.btnname;
+        this.justItem.jpro2 = tempitem.pro2;
+    },
     // private 保存数据
     savedata(shade) {
       var result = {};
@@ -299,8 +363,8 @@ export default {
         fujia: "f",
         light_id: "light_id",
         cont: "z",
-        val1: "val1",
-        val_data: "val_data",
+        val1: this.justItem.jtype,
+        val_data: this.justItem.jpro,
         val_data1: "val_data1",
         light_color: "z_c",
         misc_type: "misc_type",
@@ -366,5 +430,60 @@ export default {
 }
 .un_qualified {
   background-color: #d9534f !important;
+}
+
+/*整个图片列表div*/
+.tab_box {
+    width: 420px;
+    min-height: 250px;
+    position: relative;
+	background-color: gray;
+	border-radius: 5px;
+}
+/*每个可切换的TAB-DIV*/
+.tab_div {
+    margin-right: -1px;
+    border-bottom: 0;
+    float: left;
+	margin-top:5px;
+}
+.tab_label {
+    display: block;
+	padding:5px 10px;
+    background-color: #eee;
+    text-align: center;
+	cursor: pointer;
+	border-radius: 5px;
+	margin-left:5px;
+}
+.tab_radio,
+.tab_content {
+    position: absolute;
+    left: -999em;
+	background-color: gray;
+	border-radius: 5px;
+}
+.tab_radio:checked ~ .tab_content {
+    margin-top: -1px;
+    padding: 8px 8px;    
+    left: 0;
+    right: 0;
+}
+.tab_radio:checked ~ .tab_label {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+    position: relative;
+    z-index: 1;
+}
+
+/*小图标列表Start*/
+.pic_items{
+	float: left;
+	width:95px;
+	height: 95px;
+	margin:5px 6px 0 0;
+	background-color: white;
+	border-radius: 5px;
+	color:red;
 }
 </style>
