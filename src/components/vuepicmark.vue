@@ -7,10 +7,10 @@
           <div class="group_btn_l" style="float:left">
             <ul class="clearfix">
               <li>
-                <button id="show_all">显示</button>
+                <button id="show_all" v-on:click="showItems">显示</button>
               </li>
               <li style="margin-bottom: 100px;">
-                <button id="hide_all">隐藏框</button>
+                <button id="hide_all" v-on:click="hiddenItems">隐藏框</button>
               </li>
               <li>
                 <button>返回</button>
@@ -261,7 +261,9 @@ export default {
           jpro2:[],// 二级属性 集合 用于选择
           seljpro2:'',// 选中的二级属性
           seljpro2value:'' // 二级属性值
-      }
+      },
+      Invalid:0,// 是否无效数据
+      InvalidData:''// 无效数据原因
     };
   },
   mounted() {
@@ -336,6 +338,19 @@ export default {
         this.justItem.jtype = item.title;
         this.justItem.jpro = tempitem.btnname;
         this.justItem.jpro2 = tempitem.pro2;
+    },
+    // public 显示
+    showItems(){
+        this.loadresutl.boxs.forEach((value)=>{
+            var $rect = $('#ui-rect-'+parseInt(value.shade-1))
+            $rect.css('display', 'block');
+        });
+    },
+    hiddenItems(){
+        this.loadresutl.boxs.forEach((value)=>{
+            var $rect = $('#ui-rect-'+parseInt(value.shade-1));
+            $rect.css('display', 'none');
+        });
     },
     // private 保存数据
     savedata(shade) {
