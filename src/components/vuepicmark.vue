@@ -251,8 +251,6 @@ var tempprodate=[
             btnname:'摩托车'
         },{
             btnname:'拖拉机'
-        },{
-            btnname:'卡丁车'
         }]
     },    {
         id:'tab2',
