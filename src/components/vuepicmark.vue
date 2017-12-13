@@ -1,123 +1,120 @@
 <template>
-  <div>
-    <div class="body_content">
-      <div class="content_box">
-        <div class="cont_l clearfix">
-          <!--按钮组-->
-          <div class="group_btn_l" style="float:left">
-            <ul class="clearfix">
-              <li>
-                <button id="show_all" v-on:click="showItems">显示</button>
-              </li>
-              <li style="margin-bottom: 100px;">
-                <button id="hide_all" v-on:click="hiddenItems">隐藏框</button>
-              </li>
-              <li>
-                <button>返回</button>
-              </li>
-              <li>
-                <button>无效数据</button>
-              </li>
-              <li>
-                <button>有效数据</button>
-              </li>
-            </ul>
+  <div class="body_content">
+    <div class="content_box">
+      <!--按钮组-->
+      <div class="group_btn_l" style="float:left">
+        <ul class="clearfix">
+          <li>
+            <button id="show_all">显示</button>
+          </li>
+          <li style="margin-bottom: 100px;">
+            <button id="hide_all">隐藏框</button>
+          </li>
+          <li>
+            <button>返回</button>
+          </li>
+          <li>
+            <button>无效数据</button>
+          </li>
+          <li>
+            <button>下一页</button>
+          </li>
+        </ul>
+      </div>
+      <div class="cont_l clearfix">
+        <!--标注有效区域-->
+        <div class="main-page">
+          <div id="work-space-loading" style="color: #DDDDDD; font-size: 50px; left: 0; position: absolute; right: 0; text-align: center; top: 100px;">加载中...</div>
+          <div id="work-space-header" style="height:30px">
+            <span id="all-count">总框数：2017</span>
+            <span id="is-valid">有效数据</span>
+            <span id="invalid-reason">原因：图片模糊图片模糊图片模糊图片模糊图片模糊</span>
           </div>
+          <!--标注内容区域-->
+          <div style="clear:left"></div>
+          <!--图片标注区域-->
+          <div id="work-cont">
+            <div id="work-space" class="workContainer wrapper">
+              <div id="viewer" class="viewer">
 
-          <!--标注有效区域-->
-          <div class="main-page">
-            <div id="work-space-loading" style="color: #DDDDDD; font-size: 50px; left: 0; position: absolute; right: 0; text-align: center; top: 100px;">加载中...</div>
-            <h5 style="margin-bottom:10px;">2017</h5>
-            <!--标注内容区域-->
-
-            <!--图片标注区域-->
-            <div id="work-cont">
-              <div id="work-space" class="workContainer wrapper">
-                <div id="viewer" class="viewer">
-
-                </div>
               </div>
             </div>
+          </div>          
+        </div>
 
-            <div id="box-form" style="position: absolute; right: -218px; top: 30px;  box-shadow: rgb(191, 191, 191) 1px 0px 10px; z-index: 999; width: 210px; background-color: rgb(255, 255, 255); display:none;">
-              <div style="padding:10px;">
-                <div style="display:none;background-color: #FFF;margin-bottom: 10px;">
-                  <a style="float: right;display: block;width: 25px;height: 25px;text-align: center;background-color: #FB0000;line-height: 25px;color: #fff;font-size: 36px;cursor: pointer;"
-                    id="cloth-close">
-                    ×
-                  </a>
-                </div>
-                <p id="Traffic_light_status">
-                  <label>交通标志类型：</label>
-                  <br />
-                  <label style="width:200px;" >{{justItem.jtype}}</label>
-                  <br />
-                  <label style="width:200px;" >{{justItem.jpro}}</label>
-                  <br />
-                  <template v-if="justItem.jpro!=''">
-                        <select style="width:180px;" v-model="justItem.seljpro2">
-                            <option v-for="jpro2 in justItem.jpro2" v-bind:value="jpro2">
-                                {{jpro2.pro2txt}}
-                             </option>
-                        </select>
-                  </template>
-                  <template v-if="justItem.seljpro2.pro2type=='text'">
-                        <input type="text" v-model="justItem.seljpro2value" />
-                  </template>
-                  <template v-if="justItem.seljpro2.pro2type=='sel'">
-                        <select v-model="justItem.seljpro2value">
-                            <option v-for="selpro2 in justItem.seljpro2.pro2option" v-bind:value="selpro2">
-                                {{selpro2}}
-                             </option> 
-                        </select>
-                  </template>
-                </p>
-                <p id="fujia_content">
-                  <label>附加文本:</label>
-                  <br />
-                  <input id="fujia" name="fujia" type="text" style="width:167px" v-model="justItemtype" />
-                </p>
-                <br />
-                <p>
-                  <button type="button" id="box_save" v-on:click="saveItem" >保存</button>&nbsp;
-                  <button type="button" id="box_cancel">取消</button>
-                  <br>
-                  <span style="color:#f00;">操作完成请记得点击“保存”</span>
-                </p>
-              </div>
+        <div id="mark_menu">
+            <div class="rect_list" v-for="item of loadresutl.boxs" >
+                {{item.shade}}
+                <span v-on:click="delItem(item)">x</span>
             </div>
-          </div>
-          <div>
-              <!-- <ul id="v-for-object">
-                  <li v-for="item of loadresutl.boxs">
-                    <input type="button"  class="btn btn btn-info" 
-                    v-bind:value="item.shade"/>
-                  </li>
-              </ul> -->
-            <div id="mark_menu">
-                <div class="rect_list" v-for="item of loadresutl.boxs" >
-                    {{item.shade}}
-                    <span v-on:click="delItem(item)">x</span>
-                </div>
-            </div>
-          </div>
-        </div>
-        <!--右侧表单部分-->
-        <div class="cont_r clearfix">
-</style>
-<div class="tab_box">
-    <div class="tab_div" v-for="item in prodata">
-        <input type="radio" v-bind:id="item.id" class="tab_radio" name="tab" checked="checked" />
-        <label class="tab_label" v-bind:for="item.id">{{item.title}}</label>		
-        <div class="tab_content">
-			<hr>
-            <div class="pic_items" v-for="tempitem in item.plist" v-on:click="chekproitem(item,tempitem)">{{tempitem.btnname}}</div>
-        </div>
-    </div>
-</div>
         </div>
       </div>
-    </div>
+      <div class="tab_box">
+        <div class="tab_div" v-for="item in prodata">
+          <input type="radio" v-bind:id="item.id" class="tab_radio" name="tab" checked="checked" />
+          <label class="tab_label" v-bind:for="item.id">{{item.title}}</label>	
+          <div class="tab_content">            
+            <div class="pic_items" v-for="tempitem in item.plist" v-on:click="chekproitem(item,tempitem)">{{tempitem.btnname}}</div>
+          </div>
+        </div>
+      </div>
+      <div id="box-form" style="position: relative;float:left;margin-top:2px;margin-left:2px;box-shadow: rgb(191, 191, 191) 1px 0px 10px; z-index: 999; width: 210px; background-color: rgb(255, 255, 255); display:none;">
+        <div style="padding:10px;">
+          <div style="display:none;background-color: #FFF;margin-bottom: 10px;">
+            <a style="float: right;display: block;width: 25px;height: 25px;text-align: center;background-color: #FB0000;line-height: 25px;color: #fff;font-size: 36px;cursor: pointer;"
+              id="cloth-close">
+              ×
+            </a>
+          </div>
+          <p id="Traffic_light_status">
+            <label>交通标志类型：</label>
+            <br />
+            <label style="width:200px;" >{{justItem.jtype}}</label>
+            <br />
+            <label style="width:200px;" >{{justItem.jpro}}</label>
+            <template v-if="">
+
+            </template>
+          </p>
+          <p id="fujia_content">
+            <label>附加文本:</label>
+            <br />
+            <input id="fujia" name="fujia" type="text" style="width:167px" v-model="justItemtype" />
+          </p>
+          <br />
+          <p>
+            <button type="button" id="box_save" v-on:click="saveItem" >保存</button>&nbsp;
+            <button type="button" id="box_cancel">取消</button>
+            <br>
+            <span style="color:#f00;">操作完成请记得点击“保存”</span>
+          </p>
+        </div>
+      </div>
+      <!--质检表单-->
+      <div class="valid_form">
+          <form action="">
+              <p class="label_input">错误类型：</p>
+              <p>
+                  <label for="">
+                      <input type="checkbox" name="" ><span>存在未框选  </span>
+                        <input type="checkbox" name="" ><span>框选错误    </span>
+                      <input type="checkbox" name="" ><span>场景信息错误</span>
+                      <input type="checkbox" name="" ><span>有效性错误  </span>
+                  </label>
+              </p>
+              <p class="label_input">审核意见：</p>
+              <textarea id="check_inp"></textarea>
+              <div class="valid_btn_group">
+                  <button id="valid_qualified">合格</button>
+                  <button id="valid_unqualified">不合格</button>
+                  <button id="repulse">一键打回</button>
+                  <button id="tem_save">临时保存</button>
+                  <button id="complete">完成</button>
+                  <button id="next">下一张</button>
+              </div>
+          </form>
+      </div>
+    </div>      
   </div>
 </template>
 
@@ -198,26 +195,62 @@ var tempprodate=[
         plist:[{
             btnname:'大卡车',
             pro2:[{
-                id: 1,
                 pro2type:'text',
                 pro2txt:'车牌'
             },{
-                id:2,
                 pro2type:'text',
                 pro2txt:'颜色'
             }]
         },{
             btnname:'小卡车',
             pro2:[{
-                id: 3,
                 pro2type:'sel',
                 pro2txt:'车型',
                 pro2option:['李白','杜甫','白居易']
             },{
-                id:4,
                 pro2type:'text',
                 pro2txt:'颜色'
             }]
+        },{
+            btnname:'卡丁车'
+        },{
+            btnname:'碰碰车'
+        },{
+            btnname:'摩托车'
+        },{
+            btnname:'拖拉机'
+        },{
+            btnname:'卡丁车'
+        },{
+            btnname:'碰碰车'
+        },{
+            btnname:'摩托车'
+        },{
+            btnname:'拖拉机'
+        },{
+            btnname:'卡丁车'
+        },{
+            btnname:'碰碰车'
+        },{
+            btnname:'摩托车'
+        },{
+            btnname:'拖拉机'
+        },{
+            btnname:'卡丁车'
+        },{
+            btnname:'碰碰车'
+        },{
+            btnname:'摩托车'
+        },{
+            btnname:'拖拉机'
+        },{
+            btnname:'卡丁车'
+        },{
+            btnname:'碰碰车'
+        },{
+            btnname:'摩托车'
+        },{
+            btnname:'拖拉机'
         },{
             btnname:'卡丁车'
         }]
@@ -258,12 +291,8 @@ export default {
       justItem: {
           jtype:'',// 类型
           jpro:'',// 属性
-          jpro2:[],// 二级属性 集合 用于选择
-          seljpro2:'',// 选中的二级属性
-          seljpro2value:'' // 二级属性值
-      },
-      Invalid:0,// 是否无效数据
-      InvalidData:''// 无效数据原因
+          jpro2:''// 二级属性
+      }
     };
   },
   mounted() {
@@ -337,20 +366,6 @@ export default {
     chekproitem(item,tempitem){
         this.justItem.jtype = item.title;
         this.justItem.jpro = tempitem.btnname;
-        this.justItem.jpro2 = tempitem.pro2;
-    },
-    // public 显示
-    showItems(){
-        this.loadresutl.boxs.forEach((value)=>{
-            var $rect = $('#ui-rect-'+parseInt(value.shade-1))
-            $rect.css('display', 'block');
-        });
-    },
-    hiddenItems(){
-        this.loadresutl.boxs.forEach((value)=>{
-            var $rect = $('#ui-rect-'+parseInt(value.shade-1));
-            $rect.css('display', 'none');
-        });
     },
     // private 保存数据
     savedata(shade) {
@@ -412,9 +427,10 @@ export default {
   width: 100%;
   padding-top: 6px;
   margin: 0px auto;
-  height: 100px;
+  margin-top:2px;
+  height: 50px;
   background-color: #ccc;
-  border: 1px solid red;
+  border-radius: 5px;
 }
 #mark_menu > .rect_list {
   float: left;
@@ -449,34 +465,49 @@ export default {
 
 /*整个图片列表div*/
 .tab_box {
-    width: 420px;
-    min-height: 250px;
+    width: 440px;
+    min-height: 254px;
     position: relative;
-	background-color: gray;
-	border-radius: 5px;
+    float: left;
+    background-color:#ccc;
+    border-radius: 5px;
+    margin-top:30px;
+    margin-left:2px;
 }
 /*每个可切换的TAB-DIV*/
 .tab_div {
     margin-right: -1px;
     border-bottom: 0;
     float: left;
-	margin-top:5px;
+    margin-top:5px;
 }
 .tab_label {
-    display: block;
+  display: block;
 	padding:5px 10px;
-    background-color: #eee;
-    text-align: center;
+  background-color: #eee;
+  text-align: center;
 	cursor: pointer;
 	border-radius: 5px;
-	margin-left:5px;
+	margin-left:8px;
 }
 .tab_radio,
 .tab_content {
     position: absolute;
     left: -999em;
-	background-color: gray;
-	border-radius: 5px;
+    width: 440px;
+    background-color:#ccc;
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-top:1px solid white;
+    max-height: 214px;
+    overflow :auto;
+}
+.tab_div span
+{
+  margin-top:0px;
+  margin-bottom:0px;
+  border: 1px solid white;
 }
 .tab_radio:checked ~ .tab_content {
     margin-top: -1px;
@@ -485,8 +516,7 @@ export default {
     right: 0;
 }
 .tab_radio:checked ~ .tab_label {
-    background-color: #fff;
-    border-bottom: 1px solid #fff;
+    background-color: #fff;    
     position: relative;
     z-index: 1;
 }

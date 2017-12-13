@@ -79,7 +79,7 @@ ul,li{
     min-height: 600px;
 }
 .cont_l{
-    width:870px;
+    width:800px;
 }
 .cont_r{
     width:410px;
@@ -136,7 +136,9 @@ ul,li{
     float: right;
     width:27px;
     padding-right:3px;
-	margin: 0;
+    margin: 0;
+    margin-top:30px;
+    margin-right: 2px;
     padding: 0;
     box-sizing: border-box;
 }
@@ -154,4 +156,70 @@ ul,li{
     outline: none;
     border-radius: 3px;
     background-color: #ffc600;
+}
+#work-space-header span{
+    background-color:rgba(25, 21, 21, 0.3); 
+    border-radius: 5px;
+    padding: 5px 10px;
+    float: left;
+    margin-bottom: 2px;
+    margin-right: 2px;
+    min-width: 150px;
+}
+/*质检框*/
+.valid_form{
+    float:left;
+    width:400px;
+    height:385px;
+    padding:5px 15px;
+    font-size: 14px;
+    background-color: rgba(25, 21, 21, 0.3);
+    border-radius: 8px;
+    margin-top:4px;
+    margin-left:2px;
+    text-align: left;
+}
+.valid_form .label_input{
+    font-size: 16px;
+    color: #000;
+    margin:10px 0;
+}
+#check_inp{
+    width:100%;
+    height:120px;
+    resize: none;
+}
+.valid_btn_group{
+    margin-top:10px;
+}
+.valid_btn_group>button{
+    width:180px;
+    height:38px;
+    margin-bottom:5px;
+    border-radius: 5px;
+    line-height:38px;
+    font-size: 18px;
+    color: #fff;
+}
+.valid_btn_group>button:nth-child(odd){
+    margin-right:5px;
+}
+/*质检按钮颜色*/
+#valid_qualified{
+    background-color: #95d195;
+}
+#valid_unqualified{
+    background-color: #d9534f;
+}
+#repulse{
+    background-color: #f5ca8c;
+}
+#tem_save{
+    background-color: #ffc600;
+}
+#complete{
+    background-color: #00acdd;
+}
+#next{
+    background-color: #eb832c;
 }
